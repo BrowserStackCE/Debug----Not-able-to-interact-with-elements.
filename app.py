@@ -7,8 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 def run_test():
 
-	userName = "arvindr1"
-	accessKey = "JNzsLXukmxpiaaCsBhSx"
+	userName = "<BROWSERSTACK_USERNAME>"
+	accessKey = "<BROWSERSTACK_ACCESS_KEY>"
 
 	response = requests.get('https://api-cloud.browserstack.com/app-automate/recent_apps', auth=(userName,accessKey))
 	not_uploaded = False
