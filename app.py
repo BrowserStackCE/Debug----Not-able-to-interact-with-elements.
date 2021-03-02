@@ -1,18 +1,38 @@
+import requests
 from appium import webdriver
 from appium.webdriver.common.mobileby import MobileBy
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def runtest():
+def run_test():
 
-	userName = "<BROWSERSTACK_USERNAME>"
-	accessKey = "<BROWSERSTACK_ACCESS_KEY>"
+	userName = "arvindr1"
+	accessKey = "JNzsLXukmxpiaaCsBhSx"
+
+	response = requests.get('https://api-cloud.browserstack.com/app-automate/recent_apps', auth=(userName,accessKey))
+	not_uploaded = False
+	json_data = response.json()
+	for item in json_data:
+		try:
+			if item["custom_id"] == "bstack-webview":
+				not_uploaded = True
+				app_url = item["app_url"]
+				break
+		except:
+			pass
+	if not_uploaded == False:
+		files = {
+	    'data': (None, '{"url": "https://github.com/arvind1998/browserstack-webview/raw/master/bstack-webview.apk","custom_id":"bstack-webview"}'),
+		}
+		response = requests.post('https://api-cloud.browserstack.com/app-automate/upload', files=files, auth=(userName,accessKey))
+		json_data = response.json()
+		app_url = json_data["app_url"]
 
 	desired_caps = {
 		"os_version" : "10.0",
 		"device" : "Samsung Galaxy Note 20",
-		"app" : "<APP_URL>",
+		"app" : app_url,
 		"build" : "BrowserStack WebView",
 		"name" : "Test"
 	}
@@ -36,4 +56,4 @@ def runtest():
 	driver.quit()
 
 if __name__ == "__main__":
-    runtest()
+    run_test()
