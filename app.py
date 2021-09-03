@@ -3,39 +3,43 @@ from appium import webdriver
 from appium.webdriver.common.mobileby import MobileBy
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
 
 
 def run_test():
 
-	userName = "<BROWSERSTACK_USERNAME>"
-	accessKey = "<BROWSERSTACK_ACCESS_KEY>"
+	userName = os.environ.get('BROWSERSTACK_USERNAME')
+	accessKey = os.environ.get('BROWSERSTACK_ACCESS_KEY')
 
-	response = requests.get('https://api-cloud.browserstack.com/app-automate/recent_apps', auth=(userName,accessKey))
-	not_uploaded = False
-	json_data = response.json()
-	for item in json_data:
-		try:
-			if item["custom_id"] == "bstack-webview":
-				not_uploaded = True
-				app_url = item["app_url"]
-				break
-		except:
-			pass
-	if not_uploaded == False:
-		files = {
-	    'data': (None, '{"url": "https://github.com/arvind1998/browserstack-webview/raw/master/bstack-webview.apk","custom_id":"bstack-webview"}'),
-		}
-		response = requests.post('https://api-cloud.browserstack.com/app-automate/upload', files=files, auth=(userName,accessKey))
-		json_data = response.json()
-		app_url = json_data["app_url"]
+# 	response = requests.get('https://api-cloud.browserstack.com/app-automate/recent_apps', auth=(userName,accessKey))
+# 	not_uploaded = False
+# 	json_data = response.json()
+# 	for item in json_data:
+# 		try:
+# 			if item["custom_id"] == "bstack-webview":
+# 				not_uploaded = True
+# 				app_url = item["app_url"]
+# 				break
+# 		except:
+# 			pass
+# 	if not_uploaded == False:
+# 		files = {
+# 	    'data': (None, '{"url": "https://github.com/arvind1998/browserstack-webview/raw/master/bstack-webview.apk","custom_id":"bstack-webview"}'),
+# 		}
+# 		response = requests.post('https://api-cloud.browserstack.com/app-automate/upload', files=files, auth=(userName,accessKey))
+# 		json_data = response.json()
+# 		app_url = json_data["app_url"]
+
+	app_url = os.environ.get('BROWSERSTACK_APP_ID')
 
 	desired_caps = {
 		"os_version" : "10.0",
 		"device" : "Samsung Galaxy Note 20",
 		"app" : app_url,
-		"build" : "BrowserStack WebView",
 		"name" : "Test"
 	}
+	
+	desired_caps['build'] = os.environ.get('BROWSERSTACK_BUILD_NAME')
 
 	driver = webdriver.Remote("https://" + userName + ":" + accessKey + "@hub-cloud.browserstack.com/wd/hub", desired_caps)
 
