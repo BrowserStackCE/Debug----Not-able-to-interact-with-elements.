@@ -1,4 +1,7 @@
-# browserstack-webview
+# Debug---Webview
+This repository demonstrates how to debug tests with App Automate for internal debug certification.
+
+![BrowserStack Logo](https://d98b8t1nnulk5.cloudfront.net/production/images/layout/logo-header.png?1469004780)
 
 ## Using Python
 
