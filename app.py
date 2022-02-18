@@ -10,26 +10,6 @@ def run_test():
 
 	userName = os.environ.get('BROWSERSTACK_USERNAME')
 	accessKey = os.environ.get('BROWSERSTACK_ACCESS_KEY')
-
-# 	response = requests.get('https://api-cloud.browserstack.com/app-automate/recent_apps', auth=(userName,accessKey))
-# 	not_uploaded = False
-# 	json_data = response.json()
-# 	for item in json_data:
-# 		try:
-# 			if item["custom_id"] == "bstack-webview":
-# 				not_uploaded = True
-# 				app_url = item["app_url"]
-# 				break
-# 		except:
-# 			pass
-# 	if not_uploaded == False:
-# 		files = {
-# 	    'data': (None, '{"url": "https://github.com/arvind1998/browserstack-webview/raw/master/bstack-webview.apk","custom_id":"bstack-webview"}'),
-# 		}
-# 		response = requests.post('https://api-cloud.browserstack.com/app-automate/upload', files=files, auth=(userName,accessKey))
-# 		json_data = response.json()
-# 		app_url = json_data["app_url"]
-
 	app_url = os.environ.get('BROWSERSTACK_APP_ID')
 
 	desired_caps = {
@@ -49,8 +29,7 @@ def run_test():
 
 	search_element.click()
 
-	WebDriverWait(driver, 30).until(lambda d: True if 'WEBVIEW_com.example.browserstackwebview' in d.contexts else False)
-	driver.switch_to.context(driver.contexts[1])
+	
 
 	elem = driver.find_element_by_name("q")
 	elem.send_keys("BrowserStack")
